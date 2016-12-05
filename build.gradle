@@ -65,12 +65,6 @@ configurations {
     antlr3
     antlr4
 
-    databaseTestCompile.extendsFrom testCompile
-    databaseTestRuntime.extendsFrom testRuntime
-
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
-
     linux_x86_64Compile.extendsFrom compile
     macosx_x86_64Compile.extendsFrom compile
     win32_x86Compile.extendsFrom compile
@@ -152,24 +146,8 @@ dependencies {
 sourceSets {
     main {
         java {
-            // remove "src/oracleMock" if ojdbc.jar is available
-            srcDirs = ["src/main/java", "src/main/gen", "src/oracleMock"]
+            srcDirs = ["src/main/java", "src/main/gen"]
         }
-    }
-    databaseTest {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/databaseTest/java')
-        }
-    }
-    integrationTest {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/integrationTest/java')
-        }
-        resources.srcDir file('src/integrationTest/resources')
     }
 }
 
@@ -179,7 +157,7 @@ processResources {
                 "year": String.valueOf(Calendar.getInstance().get(Calendar.YEAR)),
                 "authors": new File('AUTHORS').readLines().findAll { !it.startsWith("#") }.join(", "),
                 "developers": new File('DEVELOPERS').readLines().findAll { !it.startsWith("#") }.join(", "))
-                filteringCharset = 'UTF-8'
+        filteringCharset = 'UTF-8'
     }
     filteringCharset = 'UTF-8'
 
@@ -257,9 +235,32 @@ javadoc {
 }
 
 test {
+    useJUnit {
+        excludeCategories 'net.sf.jabref.testutils.category.DatabaseTests'
+        excludeCategories 'net.sf.jabref.testutils.category.FetcherTests'
+        excludeCategories 'net.sf.jabref.testutils.category.GUITests'
+    }
     testLogging {
         events "failed"
         exceptionFormat "full"
+    }
+}
+
+task databaseTest(type: Test) {
+    useJUnit {
+        includeCategories 'net.sf.jabref.testutils.category.DatabaseTests'
+    }
+}
+
+task fetcherTest(type: Test) {
+    useJUnit {
+        includeCategories 'net.sf.jabref.testutils.category.FetcherTests'
+    }
+}
+
+task guiTest(type: Test) {
+    useJUnit {
+        includeCategories 'net.sf.jabref.testutils.category.GUITests'
     }
 }
 
@@ -268,16 +269,6 @@ task copyTestResources(type: Copy) {
     into "${buildDir}/classes/test"
 }
 processTestResources.dependsOn copyTestResources
-
-task databaseTest(type: Test) {
-    testClassesDir = sourceSets.databaseTest.output.classesDir
-    classpath = sourceSets.databaseTest.runtimeClasspath
-}
-
-task integrationTest(type: Test) {
-    testClassesDir = sourceSets.integrationTest.output.classesDir
-    classpath = sourceSets.integrationTest.runtimeClasspath
-}
 
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
