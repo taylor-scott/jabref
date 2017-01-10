@@ -28,6 +28,7 @@ public class LayoutHelper {
     public static final int IS_ENCODING_NAME = 8;
     public static final int IS_FILENAME = 9;
     public static final int IS_FILEPATH = 10;
+    public static final int IS_SEP = 11;
 
     private static String currentGroup;
 
@@ -319,6 +320,9 @@ public class LayoutHelper {
                     // This is only supported in begin/end layouts, not in
                     // entry layouts.
                     parsedEntries.add(new StringInt(name, LayoutHelper.IS_ENCODING_NAME));
+                    return;
+                } else if ("sep".equalsIgnoreCase(name)) {
+                    parsedEntries.add(new StringInt(name, LayoutHelper.IS_SEP));
                     return;
                 }
 

@@ -84,7 +84,7 @@ import org.apache.commons.logging.LogFactory;
 
 class LayoutEntry {
     private static final Log LOGGER = LogFactory.getLog(LayoutEntry.class);
-    
+
     private List<LayoutFormatter> option;
 
     // Formatter to be run after other formatters:
@@ -156,6 +156,7 @@ class LayoutEntry {
             case LayoutHelper.IS_LAYOUT_TEXT:
             case LayoutHelper.IS_SIMPLE_FIELD:
             case LayoutHelper.IS_OPTION_FIELD:
+            case LayoutHelper.IS_SEP:
             default:
                 // Do nothing
                 break;
@@ -204,6 +205,8 @@ class LayoutEntry {
             // in begin/end layouts. This prevents breakage if some users depend
             // on a field called "encoding". We simply return this field instead:
             return bibtex.getResolvedFieldOrAlias("encoding", database).orElse(null);
+        case LayoutHelper.IS_SEP:
+            return "%%SEP%%";
         default:
             return "";
         }

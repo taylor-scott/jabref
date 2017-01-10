@@ -1,6 +1,7 @@
 package net.sf.jabref.logic.util.io;
 
 import java.util.Arrays;
+import java.util.regex.*;
 
 /**
  * This class is based on http://stackoverflow.com/a/5626340/873282
@@ -43,7 +44,11 @@ public class FileNameCleaner {
                 cleanName.append('_');
             }
         }
-        return cleanName.toString().trim();
+
+        Pattern sep_pattern = Pattern.compile("\\%\\%SEP\\%\\%");
+        Matcher sep_matcher = sep_pattern.matcher(cleanName);
+        String cleanNameStr = sep_matcher.replaceAll("/");
+        return cleanNameStr.trim();
     }
 
     private static boolean isCharLegal(char c) {

@@ -59,6 +59,7 @@ public class Layout {
                     }
                 }
                 break;
+            case LayoutHelper.IS_SEP:
             default:
                 break;
             }
