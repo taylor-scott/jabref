@@ -35,6 +35,7 @@ public class Layout {
             case LayoutHelper.IS_LAYOUT_TEXT:
             case LayoutHelper.IS_SIMPLE_FIELD:
             case LayoutHelper.IS_OPTION_FIELD:
+            case LayoutHelper.IS_SEP:
                 // Do nothing
                 break;
             case LayoutHelper.IS_FIELD_START:
@@ -59,7 +60,6 @@ public class Layout {
                     }
                 }
                 break;
-            case LayoutHelper.IS_SEP:
             default:
                 break;
             }
