@@ -1,7 +1,8 @@
 package net.sf.jabref.logic.util.io;
 
 import java.util.Arrays;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class is based on http://stackoverflow.com/a/5626340/873282
